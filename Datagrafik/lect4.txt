@@ -1,0 +1,44 @@
+LECTURE ON P
+
+
+glposition=P*V*M*vPosition
+
+vPosition is an object
+(M*vPosition)= world 
+
+             M
+          /     \
+        M         M 
+     /    \      /   \
+   Mobj	  Mobj  Mobj Mobj
+
+Requiers only one object in project. 
+So: glpos=P*V*M*obj.
+------------------------
+CameraModel, be careful with the upvector,crossproduct need to be 
+implemented.
+(V*M*obj)=camera
+in qt-> lookat function
+------------------------
+NDC-coordinates: convenient, origo in center,
+consists of all we want to see in camera.
+
+--> we will then end up in the viewport. So somehow we go
+from "3D" to 2D.
+Think about the proportions of the viewport when 
+creating the P-matrix.
+------------------------
+
+Projections
+
+classical projections: oblique, isometric, one and 
+threepoint perspective.
+
+perspective vs parallell
+
+classes of parallell projections:
+	Orthographic projections
+	Axonometric projections
+	Oblique projections
+	
+

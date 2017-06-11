@@ -1,0 +1,180 @@
+#include "geometryrender.h"
+using namespace std;
+
+GeometryRender::GeometryRender()
+    : program_(0)
+    , vao_(0)
+    , vBuffer_(QOpenGLBuffer::VertexBuffer)
+    , iBuffer_(QOpenGLBuffer::IndexBuffer)
+    , n_(0)
+    , nf_(0)
+{
+}
+
+GeometryRender::~GeometryRender()
+{
+    delete program_;
+}
+
+
+
+// Initialize OpenGL
+void GeometryRender::initialize()
+{
+    OpenGLWindow::initialize();
+
+    // Enable depth test
+    glEnable(GL_DEPTH_TEST);
+
+    // Create and initialize a program object with shaders
+    program_ = initProgram(this, "vshader.glsl", "fshader.glsl");
+    // Installs the program object as part of current rendering state
+    // Corresponds to the GL call glUseProgram()
+    program_->bind();
+
+    // Creat a vertex array object
+    // Corresponds to the GL calls glGenVertexArrays() and glBindVertexArray()
+    vao_.create();
+    vao_.bind();
+
+    // Create vertex buffer in the shared display list space and
+    // bind it as VertexBuffer (GL_ARRAY_BUFFER)
+    // Corresponds to the GL calls glGenBuffers() and glBindBuffer()
+    vBuffer_.create();
+    vBuffer_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vBuffer_.bind();
+
+     // Create index buffer in the shared display list space and
+    // bind it as IndexBuffer (GL_ELEMENT_ARRAY_BUFFER)
+    iBuffer_.create();
+    iBuffer_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    iBuffer_.bind();
+    // Get locations of the attributes in the shader
+    // Corresponds to the GL calls glGetAttribLocation() and
+    // glGetUniformLocation()
+    locColor_=program_->attributeLocation("vColor");
+    locVertices_ = program_->attributeLocation("vPosition");
+
+    //transformations of matmodel
+    //Imports updated matmodel
+    // matModel.scale(1.0f,0.4f,1.0f);
+
+    //Corrects the translation change
+    GLuint locModel;
+    locModel= program_->uniformLocation("M");
+
+    program_->setUniformValue(locModel,matModel);
+    vao_.release();
+    program_->release();
+
+    loadGeometry();
+}
+
+void GeometryRender::loadOBJ(){
+  //NAME INITIALIZATION AND ALLOCATION
+  //lOADER
+  ifstream source("vert.obj");
+  if(!source.is_open()){
+    cout<<"ERROR: Cannot open file";
+  }
+  char shapename[128];
+  float x,y,z;
+   n_=3;
+  nf_=1;
+  //int a,b,c;
+  //vector<QVector> face;
+  while(1){
+    source>>shapename;
+    if (strcmp(shapename, "v")==0){
+      source >> x >> y >> z;
+      if (source.fail()){
+	
+        // Triangle 1
+	indices_.push_back(0);
+	indices_.push_back(1);
+	indices_.push_back(2);
+        loadGeometry();
+        break;
+      }
+      VertVec *tempVec= new VertVec(x,y,z,1.0f);
+      vertices_.push_back(*tempVec);
+    }
+    else if(strcmp(shapename, "f")==0){
+      //source>> a >> b >> c;
+      //   if (source.fail()){
+      //  cout<<a<<b<<c<<"\n";
+      //   loadGeometry();
+        break;
+      }
+    // for (i=2;i>=vertices_.size();i++)
+    //  Faces_list[]=vertices_.index(a)
+    // }
+    else
+      break;
+  }
+}
+
+void GeometryRender::loadGeometry(void)
+{
+ 
+      //Color definitions
+    color_.push_back(QVector4D(1.0f,0.0f,0.0f,1.0f));
+    color_.push_back(QVector4D(0.0f,1.0f,0.0f,1.0f));
+    color_.push_back(QVector4D(0.0f,0.0f,1.0f,1.0f));
+    color_.push_back(QVector4D(0.0f,1.0f,1.0f,1.0f));
+
+
+    program_->bind();
+    vao_.bind();
+
+    // Set the pointers of locVertices_ to the right places
+    // Can also call program_->setAttributeBuffer() but then the values are normalized
+
+    // Load data to the array buffer
+    // Corresponds to the GL call glBufferData()
+    size_t vSize = vertices_.size()*sizeof(VertVec);
+    size_t cSize = color_.size()*sizeof(QVector4D);
+
+    vBuffer_.allocate(vSize+cSize);
+    vBuffer_.write(0, vertices_.constData(), vSize);
+    vBuffer_.write(vSize,color_.constData(),cSize);
+
+
+        // Load indices to index array
+    size_t iSize = indices_.size()*sizeof(unsigned int);
+    iBuffer_.allocate(iSize);
+    iBuffer_.write(0, indices_.constData(), iSize);
+
+        glVertexAttribPointer(locVertices_, 4, GL_FLOAT, GL_TRUE, 0, BUFFER_OFFSET(0));
+
+        glVertexAttribPointer(locColor_,4,GL_FLOAT,GL_FALSE,0,BUFFER_OFFSET(vertices_.size()*sizeof(QVector3D)));
+
+    vao_.release();
+    program_->release();
+}
+
+// Render object
+void GeometryRender::display()
+{
+    program_->bind();
+    vao_.bind();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glEnableVertexAttribArray(locVertices_);
+    glEnableVertexAttribArray(locColor_);
+
+    glDrawElements(GL_TRIANGLES, nf_*3, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+
+    //
+    glDrawArrays(GL_TRIANGLES, 0, vertices_.size());
+    glFlush();
+    glDisableVertexAttribArray(locVertices_);
+    glDisableVertexAttribArray(locColor_);
+
+
+    vao_.release();
+    program_->release();
+
+}

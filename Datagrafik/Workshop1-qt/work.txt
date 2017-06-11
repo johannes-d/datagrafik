@@ -1,0 +1,34 @@
+[yoda@yoda-thinkpad Workshop1-qt]$ qmake 
+Info: creating stash file /home/yoda/Datagrafik/Workshop1-qt/.qmake.stash
+[yoda@yoda-thinkpad Workshop1-qt]$ qmake workshop1.pro
+[yoda@yoda-thinkpad Workshop1-qt]$ ls
+fshader.glsl        Makefile          workshop1.cpp
+geometryrender.cpp  openglwindow.cpp  workshop1.pro
+geometryrender.h    openglwindow.h    vshader.glsl
+[yoda@yoda-thinkpad Workshop1-qt]$ make
+g++ -c -pipe -O2 -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -I. -I/usr/lib/qt/mkspecs/linux-g++ -o openglwindow.o openglwindow.cpp
+g++ -c -pipe -O2 -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -I. -I/usr/lib/qt/mkspecs/linux-g++ -o geometryrender.o geometryrender.cpp
+g++ -c -pipe -O2 -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -I. -I/usr/lib/qt/mkspecs/linux-g++ -o workshop1.o workshop1.cpp
+/usr/bin/moc -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I/usr/lib/qt/mkspecs/linux-g++ -I/home/yoda/Datagrafik/Workshop1-qt -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I/usr/include/c++/6.2.1 -I/usr/include/c++/6.2.1/x86_64-pc-linux-gnu -I/usr/include/c++/6.2.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/6.2.1/include-fixed -I/usr/include openglwindow.h -o moc_openglwindow.cpp
+g++ -c -pipe -O2 -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -I. -I/usr/lib/qt/mkspecs/linux-g++ -o moc_openglwindow.o moc_openglwindow.cpp
+g++ -Wl,-O1 -Wl,-O1,--sort-common,--as-needed,-z,relro -o Workshop1 openglwindow.o geometryrender.o workshop1.o moc_openglwindow.o   -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+[yoda@yoda-thinkpad Workshop1-qt]$ ls -l
+totalt 148
+-rwx------ 1 yoda yoda    90 26 okt 09.48 fshader.glsl
+-rw-r--r-- 1 yoda yoda  2446 26 okt 12.19 geometryrender.cpp
+-rw-r--r-- 1 yoda yoda   654 26 okt 13.15 geometryrender.h
+-rw-r--r-- 1 yoda yoda 16536 10 nov 09.19 geometryrender.o
+-rw-r--r-- 1 yoda yoda 14916 10 nov 09.18 Makefile
+-rw-r--r-- 1 yoda yoda  3475 10 nov 09.19 moc_openglwindow.cpp
+-rw-r--r-- 1 yoda yoda 11192 10 nov 09.19 moc_openglwindow.o
+-rw-r--r-- 1 yoda yoda  3105 26 okt 13.43 openglwindow.cpp
+-rw-r--r-- 1 yoda yoda   858 26 okt 13.15 openglwindow.h
+-rw-r--r-- 1 yoda yoda 14232 10 nov 09.19 openglwindow.o
+-rwxr-xr-x 1 yoda yoda 40224 10 nov 09.19 Workshop1
+-rw-r--r-- 1 yoda yoda   509 26 okt 13.09 workshop1.cpp
+-rw-r--r-- 1 yoda yoda  5760 10 nov 09.19 workshop1.o
+-rw-r--r-- 1 yoda yoda   485 28 okt 15.47 workshop1.pro
+-rwx------ 1 yoda yoda    96 26 okt 12.14 vshader.glsl
+[yoda@yoda-thinkpad Workshop1-qt]$ ./Workshop1 
+qt5ct: using qt5ct plugin
+

@@ -1,0 +1,42 @@
+#pragma once
+
+#include <QOpenGLBuffer>
+#include <QOpenGLVertexArrayObject>
+#include <QVector4D>
+#include <QMatrix4x4>
+#include <QtCore/qmath.h>
+#include <sstream>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include "openglwindow.h"
+
+using VertVec = QVector4D;
+class GeometryRender : public OpenGLWindow
+{
+public:
+	GeometryRender();
+	~GeometryRender();
+
+	void initialize() Q_DECL_OVERRIDE;
+	void display() Q_DECL_OVERRIDE;
+	void loadOBJ();
+	void translateMatModel();
+
+private:
+	QOpenGLShaderProgram *program_;
+
+	// OpenGL buffers
+	QOpenGLVertexArrayObject vao_;
+	QOpenGLBuffer vBuffer_;
+
+	// OpenGL attribute locations
+	GLuint locVertices_;
+
+	// Geometry data
+	QVector<VertVec> vertices_;
+
+	//Adding a model matrix
+	QMatrix4x4 matModel,cameraModel,projModel;
+	void loadGeometry(void);
+};
